@@ -1,28 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Movie from './components/Movie';
-import { FEATURED_API, SEARCH_API } from './Common';
 import './index.css';
+import { connect } from 'react-redux';
+import { movieListThunk, movieSearchThunk } from './state/Thunk';
 
-function App() {
-    const [ movies, setMovies ] = useState([]);
-    const [ searchQuery, setSearchQuery ] = useState("");
+function App(props) {
     const onSearch = (e) => {
         e.preventDefault();
-        getMovies(SEARCH_API(searchQuery));
-        setSearchQuery('');
+        props.searchMovies(e.target.value);
     };
     const handleOnChange = (e) => {
-        setSearchQuery(e.target.value);
-    };
-    const getMovies = (url) => {
-        fetch(url)
-            .then(res => res.json())
-            .then(res => res.results)
-            .then(fetchedMovies => setMovies(fetchedMovies));
+        props.searchMovies(e.target.value);
     };
 
     useEffect(() => {
-        getMovies(FEATURED_API);
+        props.fetchMovies();
     }, []);
 
     return (
@@ -38,10 +30,32 @@ function App() {
                 </div>
             </header>
             <div className="movie-container">
-                { (movies ? movies : []).map(movie => <Movie key={movie.id} movie={movie}/>) }
+                { props.movies.map(movie => <Movie key={movie.id} movie={movie}/>) }
             </div>
         </>
     );
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        movies: state.movies
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchMovies: () => dispatch(movieListThunk()),
+        searchMovies: (searchCriteria) => {
+            if (searchCriteria === '') {
+                dispatch(movieListThunk());
+            } else {
+                dispatch(movieSearchThunk(searchCriteria));
+            }
+        }
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);
