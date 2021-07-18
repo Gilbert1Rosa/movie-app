@@ -1,21 +1,25 @@
-const initialMovieState = {
-    movies: []
-}
+const ReduxHelper = require('../helper/ReduxHelper');
 
-const initialSearchState = {
+const initialState = {
+    movies: [],
     searchCriteria: ''
 }
 
-export const movieReducer = (state = initialMovieState, action) => {
-    const movies = action.payload ? action.payload : [];
-    return {
-        movies: [...movies]
+const reducers = {
+    fetchMovies: (state, action) => {
+        const movies = action.payload ? action.payload : [];
+        return {
+            ...state,
+            movies: [...movies]
+        }
+    },
+    searchMovies: (state, action) => {
+        return {
+            ...state,
+            searchCriteria: action.payload
+        }
     }
-}
+};
 
-export const searchReducer = (state = initialSearchState, action) => {
-    return {
-        ...state,
-        searchCriteria: action.payload
-    }
-}
+export const movieReducer = ReduxHelper.reducerBuilder(initialState, reducers);
+export const searchReducer = ReduxHelper.reducerBuilder(initialState, reducers);

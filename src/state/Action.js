@@ -1,13 +1,4 @@
-export const setMovies = movies => {
-    return {
-        type: 'SET_MOVIES',
-        payload: movies
-    }
-}
+const ReduxHelper = require('../helper/ReduxHelper');
 
-export const setSearchCriteria = searchCriteria => {
-    return {
-        type: 'SEARCH_MOVIES',
-        payload: searchCriteria
-    }
-}
+export const setMovies = ReduxHelper.actionBuilder('fetchMovies', 'payload');
+export const setSearchCriteria = ReduxHelper.actionBuilder('searchMovies', 'payload');

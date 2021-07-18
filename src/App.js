@@ -3,32 +3,27 @@ import Movie from './components/Movie';
 import './index.css';
 import { connect } from 'react-redux';
 import { movieListThunk, movieSearchThunk } from './state/Thunk';
+import Header from './components/Header';
+import movieStore from './state/Store';
 
 function App(props) {
+    const { searchMovies, fetchMovies } = props;
     const onSearch = (e) => {
         e.preventDefault();
-        props.searchMovies(e.target.value);
+        searchMovies(e.target.value);
     };
     const handleOnChange = (e) => {
-        props.searchMovies(e.target.value);
+        searchMovies(e.target.value);
     };
 
     useEffect(() => {
-        props.fetchMovies();
-    }, []);
+        fetchMovies();
+        console.log(movieStore.getState());
+    }, [fetchMovies]);
 
     return (
         <>
-            <header>
-                <div className="search-bar">
-                    <form onSubmit={onSearch}>
-                        <input className="search"
-                               type="search"
-                               placeholder="Buscar..."
-                               onChange={handleOnChange}/>
-                    </form>
-                </div>
-            </header>
+            <Header onSearch={onSearch} handleOnChange={handleOnChange}/>
             <div className="movie-container">
                 { props.movies.map(movie => <Movie key={movie.id} movie={movie}/>) }
             </div>

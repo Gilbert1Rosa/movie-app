@@ -17,9 +17,9 @@ const Movie = (props) => {
     return (
         <div className="movie">
             <img className="movie-poster" src={IMG_API(movie.poster_path)} alt={movie.title}/>
-            <div className="movie-info">
+            <div className="movie-info secondary">
                 <h3>{movie.title}</h3>
-                <span className={`tag-${setVoteClass(movie.vote_average)}`}>{movie.vote_average}</span>
+                <span className={`tag-${setVoteClass(movie.vote_average)} tertiary`}>{movie.vote_average}</span>
             </div>
             <div className="movie-overview">
                 <h3>Overview: </h3>
